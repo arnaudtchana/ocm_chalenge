@@ -1,0 +1,21 @@
+{
+  "name": "ionic-app-base",
+  "app_id": "",
+  "type": "ionic1",
+  "integrations": {
+    "gulp": {}
+  },
+  "watchPatterns": [
+    "scss/**/*",
+    "www/**/*",
+    "!www/lib/**/*",
+    "!www/**/*.map"
+  ],
+  "gulpStartupTasks": [
+    "sass",
+    "watch"
+  ],
+  "gulp": {
+    "enabled": false
+  }
+}
