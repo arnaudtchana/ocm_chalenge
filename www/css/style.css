@@ -1,0 +1,22 @@
+.orange_color{
+    background-color: #f16e00;
+    color: white;
+}
+.decalage_connexion{
+    margin-top: 35%;
+}
+.bar_color{
+    color: white;
+    background-color: #f16e00;
+}
+.checkbox input:checked:before, .checkbox input:checked + .checkbox-icon:before {
+    background: black;
+    border-color: black;
+}
+
+.button-clear.button-clear {
+    border-color: transparent;
+    /* background: none; */
+    /* box-shadow: none; */
+    color: white;
+}

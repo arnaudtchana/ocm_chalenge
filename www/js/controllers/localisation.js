@@ -2,7 +2,7 @@
  * Created by user on 16/02/2018.
  ici le fichier permettant de gerer la localisation des points disponibles pour un service donne*/
 app
-  .controller('LocalisationCtrl', function($scope,$state,Restangular,$cordovaGeolocation,$stateParams) {
+  .controller('LocalisationCtrl', function($scope,$state,Restangular,$cordovaGeolocation,$stateParams,$ionicLoading,ionicToast) {
 
     /*on fait la requete restangular qui permet de recurer la liste des services en base de donnees
      * pour que lutilisateur choisisse le service qui l'interesse*/
@@ -35,6 +35,10 @@ app
     }
 
     $scope.$on('$ionicView.enter', function () {
+      /*on lance le loading a ce niveau en attendant de rechercher tous les points*/
+        $ionicLoading.show({
+            template: 'Loading...',
+        })
       $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
         console.log(position);
         $scope.coords.latitude = position.coords.latitude;
@@ -44,13 +48,14 @@ app
         var location = {
           latitude: $scope.coords.latitude,
           longitude: $scope.coords.longitude,
-          service_id: $stateParams.service_id
+          depot: $stateParams.depot,
+          retrait: $stateParams.retrait
         }
+        console.log(location)
         var Services = Restangular.all('retourne_service');
         Services.post(location).then(function (data) {
           //console.log(data);
           $scope.services = data.donne;
-
 
           var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
           //var latLng = new google.maps.LatLng(3.86, 11.5);
@@ -67,7 +72,7 @@ app
             /*ici on affiche les differents marqueurs de la page en question*/
             /*on fait une boucle ici pour afficher tous les marqueurs*/
             console.log('jarrive aussi ici')
-            console.log($scope.services);
+            console.log('nombre de resultat',$scope.services.length);
             angular.forEach($scope.services,function (value,key) {
               /*ici chaque marqueur va venir avec son image correspondante*/
               console.log(data.icone)
@@ -76,18 +81,25 @@ app
                 map: $scope.map,
                 animation: google.maps.Animation.DROP,
                 position: markerPos,
-                icon: {
+                /*icon: {
                   url:data.icone
-                 /* size: {
+                 /!* size: {
                     width: 50,
                     height: 50
-                  }*/
-                }
+                  }*!/
+                }*/
               });
               var infoWindowContent = "<h4>" + value.description +","+value.quartier+ "</h4>";
 
               $scope.addInfoWindow(marker, infoWindowContent, value);
             })
+              $ionicLoading.hide();
+            /*on affiche un toast ici pour indiquer le nombre de resultats trouver*/
+              if($scope.services.length > 1){
+                  ionicToast.show($scope.services.length+' résultats trouvés', 'middle', false, 2000);
+              }else{
+                  ionicToast.show($scope.services.length+' résultat trouvé', 'middle', false, 2000);
+              }
 
             /*var marker = new google.maps.Marker({
              map: $scope.map,
@@ -99,6 +111,7 @@ app
 
 
         },function (error) {
+          $ionicLoading.hide();
           alert('une erreur')
         })
 
@@ -120,6 +133,7 @@ app
          title: 'Alert',
          templateUrl: 'templates/alert_localisation.html'
          });*/
+        $ionicLoading.hide();
         alert('Activer votre Gps')
         console.log("Could not get location");
       });

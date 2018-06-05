@@ -1,12 +1,29 @@
-<ion-content ng-controller="AccueilCtrl">
-  <div>on affiche la liste des services provenant de la base de donnees pour que lutilisateur choisisse
-  le service qui l'interesse
+<ion-view view-title="Login" name="login-view">
+<ion-content ng-controller="AccueilCtrl" style="background-color: black">
+  <div style="margin-top: 2%">
+    <h1 style="text-align: center"><span style="font-size: 100px;color: #f16e00;text-align: center"><i class="icon ion-location"></i></span></h1>
+  </div>
+  <div class="padding" style="margin-top:15%;">
+    <h4 style="color: white; text-align: center">{{'service_rechercher' | translate}}</h4>
   </div>
 
-  <div ng-repeat="service in services">
+  <!--<div ng-repeat="service in services">
     <li ng-click="rechercher_service(service.id)">
       <img src="{{service.lien_logo}}"/>
       <a>{{service.nom}}</a>
     </li>
+  </div>-->
+  <div class="padding">
+    <ion-checkbox ng-model="kiosque.depot" ng-change="change_depot()" ng-checked="kiosque.depot">{{'depot' | translate}}</ion-checkbox>
+    <ion-checkbox ng-model="kiosque.retrait" ng-change="change_retrait()" ng-checked="kiosque.retrait">{{'retrait' | translate}}</ion-checkbox>
+  </div>
+  <div class="padding">
+    <button class="button button-block orange_color" ng-click="rechercher()">{{'valider' | translate}}</button>
+  </div>
+  <div class="row" style="padding-bottom: 10%;margin-top: 10px">
+    <div class="col"></div>
+    <div class="col text-center" ng-click="update_langue(langue)"><span style="min-height: 32px;min-width: 32px;background-color: inherit" class="button flag-icon flag-icon-{{flag}} flag-icon-squared"></span></div>
+    <div class="col"></div>
   </div>
 </ion-content>
+</ion-view>
